@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN - SIGNUP</title>
+    </head>
+    <link rel="stylesheet" href="login.css">
+    <body>
+      <body>
+
+<a href="index.html" class="back-btn">✖</a>
+
+
+
+
+
+
+    <div class="container">
+         <h1 class="logo"><a href="index.html"> BOOK-PEDIA</a></h1> <br>
+    <form action="" id="loginform">
+        <h1>LOG-IN</h1>
+        USERNAME : <input type="text" name="" id="username" required>
+<br><br>
+        PASSWORD : <input type="password" name="" id="loginPassword" required>
+        <p id="loginError" style="color: red; text-align: center;"></p>
+<br><br>
+        <button type="submit">LOGIN</button> 
+       
+    <p>No account? <a href="#" onclick="toggleForm('signup')">Sign up</a></p>
+    </form>
+
+
+    <form action="" id="signup">
+        <h1>SIGN UP</h1>
+      Full Name: <input type="text" name="" id="name">
+      <br><br>
+      Email :   <input type="email" name="" id="email"> <br><br>
+      PASSWORD : <input type="password" name="" id="signupPassword" required> 
+      <p id="errorMsg" style="color: red; text-align: center;"></p>
+      <br><br>
+       <button type="submit">Sign Up</button>
+       
+<p>Already Have an Account? <a href="#" onclick="toggleForm('login')"> Login</a>
+    </form>
+<div id="quote" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600; font-size: 1.3em; color: white; text-align: center; margin: 20px;">
+  “The only way to do great work is to love what you do.” – Steve Jobs
+</div>
+
+
+
+</div>
+<script src="login.js"></script>
+</body>
+</html>
