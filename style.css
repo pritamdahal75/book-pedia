@@ -22,15 +22,15 @@ header {
     backdrop-filter: blur(8px);
 }
 .header-container {
-    max-width:1400px;
-    margin:0 auto;
-    padding:0 2rem;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    flex-wrap:wrap;
+    flex-wrap:nowrap;
+    width:100%;
+    overflow:hidden;
     gap:1rem;
 }
+
 .logo h1 {
     font-size:2.8rem;
     color:var(--primary);
