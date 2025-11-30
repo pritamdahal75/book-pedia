@@ -134,6 +134,26 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
 }
 .cta-btn:hover { background:var(--secondary); transform:scale(1.08); }
 
+#buy-now {
+    background-color: #2980b9;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+#buy-now:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#buy-now:hover:not(:disabled) {
+    background-color: #3498db;
+}
 .genre h2 {
     font-size:2.6rem;
     color:var(--primary);
