@@ -38,14 +38,16 @@ header {
     letter-spacing:1px;
 }
 .search-bar {
-    flex:1;
-    max-width:520px;
-    background:rgba(255,255,255,0.12);
-    border-radius:50px;
-    overflow:hidden;
-    display:flex;
-    align-items:center;
+    flex: 1 1 auto;
+    display: flex;
+    max-width: 520px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 50px 0 0 50px; 
+    overflow: hidden;
+    transition: 0.3s;
+    min-width: 0;
 }
+
 
 #search-input {
     flex:1;
@@ -57,16 +59,22 @@ header {
 }
 
 #search-btn {
-    padding:0 2.2rem;
-    background:var(--primary);
-    color:black;
-    border:none;
-    font-weight:bold;
-    cursor:pointer;
-    transition:0.3s;
-    flex-shrink:0;
-    white-space:nowrap;
+    flex-shrink: 0;
+    padding: 0 1.8rem; 
+    background: var(--primary);
+    color: black;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 0 50px 50px 0; 
+    white-space: nowrap;
+    font-size: 1rem; 
+    line-height: 2.6rem; 
+    align-items: center;
+    justify-content: center;
 }
+
 
 .nav-links { display:flex; gap:2rem; align-items:center; flex-wrap:wrap; }
 .nav-links a {
