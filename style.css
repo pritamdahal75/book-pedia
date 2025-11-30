@@ -22,15 +22,15 @@ header {
     backdrop-filter: blur(8px);
 }
 .header-container {
+    max-width:1400px;
+    margin:0 auto;
+    padding:0 2rem;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    flex-wrap:nowrap;
-    width:100%;
-    overflow:hidden;
+    flex-wrap:wrap;
     gap:1rem;
 }
-
 .logo h1 {
     font-size:2.8rem;
     color:var(--primary);
@@ -38,17 +38,15 @@ header {
     letter-spacing:1px;
 }
 .search-bar {
-    flex: 1 1 auto;
-    display: flex;
-    max-width: 520px;
-    background: rgba(255, 255, 255, 0.12);
-    border-radius: 50px 0 0 50px; 
-    overflow: hidden;
-    transition: 0.3s;
-    min-width: 0;
+    flex:1;
+    max-width:520px;
+    background:rgba(255,255,255,0.12);
+    border-radius:50px;
+    overflow:hidden;
+    display:flex;
+    transition:0.3s;
 }
-
-
+.search-bar:hover { background:rgba(255,255,255,0.18); }
 #search-input {
     flex:1;
     padding:1rem 1.8rem;
@@ -56,25 +54,19 @@ header {
     background:transparent;
     color:white;
     font-size:1.1rem;
+    z-index:10;
 }
-
+#search-input::placeholder { color:#bbb; }
 #search-btn {
-    flex-shrink: 0;
-    padding: 0 1.8rem; 
-    background: var(--primary);
-    color: black;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-    border-radius: 0 50px 50px 0; 
-    white-space: nowrap;
-    font-size: 1rem; 
-    line-height: 2.6rem; 
-    align-items: center;
-    justify-content: center;
+    padding:0 2.2rem;
+    background:var(--primary);
+    color:black;
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
 }
-
+#search-btn:hover { background:var(--secondary); transform:scale(1.05); }
 
 .nav-links { display:flex; gap:2rem; align-items:center; flex-wrap:wrap; }
 .nav-links a {
