@@ -3,11 +3,18 @@ let boughtBooks = [];
 try {
     cart = JSON.parse(localStorage.getItem('bookpedia_cart') || '[]');
     boughtBooks = JSON.parse(localStorage.getItem('bookpedia_bought') || '[]');
-} catch (e) {
-    console.warn("localStorage read failed:", e);
-}
+} catch (e) { }
 
 const FALLBACK_COVER = "https://via.placeholder.com/220x330?text=No+Cover";
+
+function addToCart(book) {
+    cart.push(book);
+    localStorage.setItem("bookpedia_cart", JSON.stringify(cart));
+    updateCartCount();
+    renderCart();
+    updateBuyNowButton();
+    alert(`Added "${book.title}"`);
+}
 
 async function loadGenres() {
     const containers = {
@@ -22,57 +29,79 @@ async function loadGenres() {
             const response = await fetch(`https://openlibrary.org/subjects/${genre}.json?limit=15`);
             const data = await response.json();
             if (!data.works || !data.works.length) continue;
-            data.works.forEach(work => {
-                try {
-                    createBookCard(work, container);
-                } catch (cardErr) {
-                    console.error(`Failed to create book card for ${work.title}:`, cardErr);
-                }
-            });
-        } catch (err) {
-            console.error(`Failed to load ${genre} works:`, err);
-        }
+            data.works.forEach(work => createBookCard({
+                title: work.title,
+                author_name: work.authors?.map(a => a.name) || ["Unknown"],
+                cover_i: work.cover_id || work.cover_i,
+                key: work.key
+            }, container));
+        } catch { }
     }
 }
 
 function createBookCard(work, container) {
-    const cover = work.cover_i ? `https://covers.openlibrary.org/b/id/${work.cover_i}-L.jpg` : FALLBACK_COVER;
+    const cover = work.cover_i
+        ? `https://covers.openlibrary.org/b/id/${work.cover_i}-L.jpg`
+        : FALLBACK_COVER;
+
     const price = (Math.random() * 20 + 12.99).toFixed(2);
-    try {
-        const div = document.createElement("div");
-        div.className = "book-card";
-        div.innerHTML = `
-            <img class="book-cover" src="${cover}">
-            <div class="book-info">
-                <div class="book-title">${work.title}</div>
-                <div class="book-author">${work.author_name?.[0] || "Unknown"}</div>
-                <div class="book-price">$${price}</div>
-                <button class="add-to-cart">Add to Cart</button>
-            </div>
-        `;
-        container.appendChild(div);
-        div.querySelector(".add-to-cart").onclick = () => {
-            cart.push({
-                key: work.key || Math.random(),
-                title: work.title,
-                author: work.author_name?.[0] || "Unknown",
-                price: parseFloat(price),
-                coverUrl: cover
-            });
-            localStorage.setItem("bookpedia_cart", JSON.stringify(cart));
-            updateCartCount();
-            renderCart();
-            updateBuyNowButton();
-            alert(`Added "${work.title}"`);
-        };
-    } catch (err) {
-        console.error(`Failed to render book card for ${work.title}:`, err);
-    }
+    const author = work.author_name?.[0] || "Unknown";
+
+    const bookObj = {
+        key: work.key,
+        title: work.title,
+        author: author,
+        price: parseFloat(price),
+        coverUrl: cover
+    };
+
+    const div = document.createElement("div");
+    div.className = "book-card";
+    div.innerHTML = `
+        <img class="book-cover" src="${cover}">
+        <div class="book-info">
+            <div class="book-title">${work.title}</div>
+            <div class="book-author">${author}</div>
+            <div class="book-price">$${price}</div>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+    `;
+    container.appendChild(div);
+
+    div.querySelector(".add-to-cart").onclick = (e) => {
+        e.stopPropagation();
+        addToCart(bookObj);
+    };
+
+    div.addEventListener("click", () => loadBookDetails(bookObj));
 }
 
+async function loadBookDetails(book) {
+    showPage("book-details");
+
+    document.getElementById("details-cover").innerHTML = `<img src="${book.coverUrl}" style="width:220px;height:330px;">`;
+    document.getElementById("details-title").textContent = book.title;
+    document.getElementById("details-author").textContent = book.author;
+    document.getElementById("details-price").textContent = "$" + book.price;
+
+    try {
+        const res = await fetch(`https://openlibrary.org${book.key}.json`);
+        const data = await res.json();
+        document.getElementById("details-description").textContent =
+            data.description?.value || data.description || "No description available.";
+    } catch {
+        document.getElementById("details-description").textContent = "No description available.";
+    }
+
+    document.getElementById("details-add-cart").onclick = () => addToCart(book);
+}
+
+document.getElementById("back-btn").onclick = () => {
+    showPage("browse");
+};
+
 function showPage(page) {
-    const sections = document.querySelectorAll("section");
-    sections.forEach(sec => sec.style.display = "none");
+    document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
     const target = document.getElementById(page);
     if (target) target.style.display = "block";
 }
@@ -86,8 +115,10 @@ function renderCart() {
     const container = document.getElementById("cart-items");
     const totalEl = document.getElementById("cart-total-amount");
     if (!container || !totalEl) return;
+
     container.innerHTML = "";
     let total = 0;
+
     cart.forEach((item, idx) => {
         total += item.price;
         const div = document.createElement("div");
@@ -102,6 +133,7 @@ function renderCart() {
             <button class="remove-btn">Remove</button>
         `;
         container.appendChild(div);
+
         div.querySelector(".remove-btn").onclick = () => {
             cart.splice(idx, 1);
             localStorage.setItem("bookpedia_cart", JSON.stringify(cart));
@@ -110,6 +142,7 @@ function renderCart() {
             updateBuyNowButton();
         };
     });
+
     totalEl.textContent = total.toFixed(2);
 }
 
@@ -122,54 +155,53 @@ document.getElementById("clear-cart")?.addEventListener("click", () => {
 });
 
 function updateLoginUI() {
-    try {
-        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-        const loginBtn = document.getElementById("login-btn");
-        const logoutBtn = document.getElementById("logout-btn");
-        if (loggedInUser) {
-            if(loginBtn) loginBtn.style.display = "none";
-            if(logoutBtn){
-                logoutBtn.style.display = "inline-block";
-                logoutBtn.textContent = `Logout (${loggedInUser.name})`;
-                logoutBtn.onclick = () => {
-                    localStorage.removeItem("loggedInUser");
-                    updateLoginUI();
-                    updateBuyNowButton();
-                    alert("Logged out successfully!");
-                    window.location.reload();
-                };
-            }
-        } else {
-            if(loginBtn) loginBtn.style.display = "inline-block";
-            if(logoutBtn) logoutBtn.style.display = "none";
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    if (loggedInUser) {
+        if (loginBtn) loginBtn.style.display = "none";
+        if (logoutBtn) {
+            logoutBtn.style.display = "inline-block";
+            logoutBtn.textContent = `Logout (${loggedInUser.name})`;
+            logoutBtn.onclick = () => {
+                localStorage.removeItem("loggedInUser");
+                updateLoginUI();
+                updateBuyNowButton();
+                alert("Logged out successfully!");
+            };
         }
-        updateBuyNowButton();
-    } catch (err) {
-        console.warn("Login UI update failed:", err);
+    } else {
+        if (loginBtn) loginBtn.style.display = "inline-block";
+        if (logoutBtn) logoutBtn.style.display = "none";
     }
+    updateBuyNowButton();
 }
 
 function setupSearch() {
     const input = document.getElementById("search-input");
     const btn = document.getElementById("search-btn");
+
     btn?.addEventListener("click", async () => {
         const query = input.value.trim();
         if (!query) return;
+
         const container = document.getElementById("fiction-row");
         container.innerHTML = "Searching...";
+
         try {
             const res = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=20`);
             const data = await res.json();
+
             container.innerHTML = "";
             if (!data.docs.length) container.textContent = "No results found";
             else data.docs.forEach(work => createBookCard({
                 title: work.title,
-                author_name: [work.author_name?.[0] || "Unknown"],
+                author_name: work.author_name || ["Unknown"],
                 cover_i: work.cover_i,
                 key: work.key
             }, container));
-        } catch (err) {
-            console.error("Search failed:", err);
+        } catch {
             container.textContent = "Failed to load search results";
         }
     });
@@ -177,11 +209,11 @@ function setupSearch() {
 
 function setupNav() {
     document.querySelectorAll("nav a[href^='#']").forEach(link => {
-        link.addEventListener("click", e => {
-            const hash = link.getAttribute("href").replace("#", "");
-            showPage(hash);
+        link.addEventListener("click", () => {
+            showPage(link.getAttribute("href").replace("#", ""));
         });
     });
+
     document.getElementById("cart-btn")?.addEventListener("click", () => showPage("cart"));
 }
 
@@ -199,9 +231,12 @@ buyNowBtn.addEventListener("click", () => {
         window.location.href = "login.html";
         return;
     }
+
     if (cart.length === 0) return;
-    let totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
-    let confirmPurchase = confirm(`Confirm purchase of ${cart.length} book(s) for $${totalAmount.toFixed(2)}?`);
+
+    const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+    const confirmPurchase = confirm(`Confirm purchase of ${cart.length} book(s) for $${totalAmount.toFixed(2)}?`);
+
     if (confirmPurchase) {
         boughtBooks.push(...cart);
         cart = [];
@@ -223,11 +258,9 @@ window.onload = () => {
     renderCart();
     updateLoginUI();
     loadGenres();
-    const hash = location.hash.replace("#", "") || "home";
-    showPage(hash);
+    showPage(location.hash.replace("#", "") || "home");
 };
 
 window.onhashchange = () => {
-    const page = location.hash.replace("#", "") || "home";
-    showPage(page);
+    showPage(location.hash.replace("#", "") || "home");
 };
