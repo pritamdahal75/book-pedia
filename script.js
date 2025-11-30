@@ -317,6 +317,12 @@ document.querySelectorAll('.mobile-nav-link').forEach(link => {
     });
 });
 
+document.getElementById('mobile-cart-btn')?.addEventListener('click', () => {
+    showPage("cart");
+    window.location.hash = "cart";
+    closeMobileMenu();
+});
+
 window.onload = () => {
     setupNav();
     setupSearch();
