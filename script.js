@@ -7,13 +7,20 @@ try {
 
 const FALLBACK_COVER = "https://via.placeholder.com/220x330?text=No+Cover";
 
-function addToCart(book) {
-    cart.push(book);
+function addToCart(book, qty = 1) {
+    const existing = cart.find(item => item.key === book.key);
+
+    if (existing) {
+        existing.qty += qty;
+    } else {
+        cart.push({ ...book, qty });
+    }
+
     localStorage.setItem("bookpedia_cart", JSON.stringify(cart));
     updateCartCount();
     renderCart();
     updateBuyNowButton();
-    alert(`Added "${book.title}"`);
+    alert(`Added ${qty} × "${book.title}"`);
 }
 
 async function loadGenres() {
@@ -40,12 +47,15 @@ async function loadGenres() {
 }
 
 function createBookCard(work, container) {
+    
     const cover = work.cover_i
-        ? `https://covers.openlibrary.org/b/id/${work.cover_i}-L.jpg`
-        : FALLBACK_COVER;
-
+    ? `https://covers.openlibrary.org/b/id/${work.cover_i}-L.jpg`
+    : FALLBACK_COVER;
+    
     const price = (Math.random() * 20 + 12.99).toFixed(2);
     const author = work.author_name?.[0] || "Unknown";
+    
+
 
     const bookObj = {
         key: work.key,
@@ -53,6 +63,7 @@ function createBookCard(work, container) {
         author: author,
         price: parseFloat(price),
         coverUrl: cover
+        
     };
 
     const div = document.createElement("div");
@@ -63,14 +74,22 @@ function createBookCard(work, container) {
             <div class="book-title">${work.title}</div>
             <div class="book-author">${author}</div>
             <div class="book-price">$${price}</div>
+
+            <input type="number" min="1" value="1" class="qty-input" style="width:60px;margin:4px 0;">
             <button class="add-to-cart">Add to Cart</button>
         </div>
     `;
+    const qtyInput = div.querySelector(".qty-input");
+if (qtyInput) {
+    qtyInput.addEventListener("click", e => e.stopPropagation());
+}
+
     container.appendChild(div);
 
     div.querySelector(".add-to-cart").onclick = (e) => {
         e.stopPropagation();
-        addToCart(bookObj);
+        const qty = parseInt(div.querySelector(".qty-input").value) || 1;
+        addToCart(bookObj, qty);
     };
 
     div.addEventListener("click", () => loadBookDetails(bookObj));
@@ -93,7 +112,7 @@ async function loadBookDetails(book) {
         document.getElementById("details-description").textContent = "No description available.";
     }
 
-    document.getElementById("details-add-cart").onclick = () => addToCart(book);
+    document.getElementById("details-add-cart").onclick = () => addToCart(book, 1);
 }
 
 document.getElementById("back-btn").onclick = () => {
@@ -104,23 +123,17 @@ function showPage(page) {
     document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
     const target = document.getElementById(page);
     if (target) target.style.display = "block";
-    const searchBar = document.querySelector(".search-bar");
-    if (searchBar) {
-        if (page === "browse") {
-            searchBar.style.display = "flex";
-        } else {
-            searchBar.style.display = "none";
-        }
+}
+function updateCartCount() {
+    const countEl = document.getElementById("cart-count");
+    if (countEl) {
+        let totalQty = cart.reduce((sum, item) => {
+            return sum + (item.qty ? item.qty : 1);   // FIXED
+        }, 0);
+        countEl.textContent = totalQty;
     }
 }
 
-function updateCartCount() {
-    const countEl = document.getElementById("cart-count");
-    const mobileCountEl = document.getElementById("mobile-cart-count");
-    
-    if (countEl) countEl.textContent = cart.length;
-    if (mobileCountEl) mobileCountEl.textContent = cart.length;
-}
 
 function renderCart() {
     const container = document.getElementById("cart-items");
@@ -131,19 +144,35 @@ function renderCart() {
     let total = 0;
 
     cart.forEach((item, idx) => {
-        total += item.price;
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+
         const div = document.createElement("div");
         div.className = "cart-item";
+
         div.innerHTML = `
             <img src="${item.coverUrl}">
             <div>
                 <h3>${item.title}</h3>
                 <p>${item.author}</p>
-                <p>$${item.price.toFixed(2)}</p>
+                <p>$${item.price.toFixed(2)} each</p>
+                <label>Qty:</label>
+                <input type="number" min="1" value="${item.qty}" class="cart-qty" style="width:60px;">
+                <p><strong>Total: $${itemTotal.toFixed(2)}</strong></p>
             </div>
             <button class="remove-btn">Remove</button>
         `;
         container.appendChild(div);
+
+        div.querySelector(".cart-qty").onchange = (e) => {
+            const newQty = parseInt(e.target.value);
+            if (newQty > 0) {
+                item.qty = newQty;
+                localStorage.setItem("bookpedia_cart", JSON.stringify(cart));
+                renderCart();
+                updateCartCount();
+            }
+        };
 
         div.querySelector(".remove-btn").onclick = () => {
             cart.splice(idx, 1);
@@ -220,17 +249,12 @@ function setupSearch() {
 
 function setupNav() {
     document.querySelectorAll("nav a[href^='#']").forEach(link => {
-        link.addEventListener("click", (e) => {
-            e.preventDefault();
-            const page = link.getAttribute("href").replace("#", "");
-            showPage(page);
-            window.location.hash = page;
+        link.addEventListener("click", () => {
+            showPage(link.getAttribute("href").replace("#", ""));
         });
     });
-    document.getElementById("cart-btn")?.addEventListener("click", () => {
-        showPage("cart");
-        window.location.hash = "cart";
-    });
+
+    document.getElementById("cart-btn")?.addEventListener("click", () => showPage("cart"));
 }
 
 const buyNowBtn = document.getElementById("buy-now");
@@ -250,8 +274,8 @@ buyNowBtn.addEventListener("click", () => {
 
     if (cart.length === 0) return;
 
-    const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
-    const confirmPurchase = confirm(`Confirm purchase of ${cart.length} book(s) for $${totalAmount.toFixed(2)}?`);
+    const totalAmount = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const confirmPurchase = confirm(`Confirm purchase of ${cart.reduce((a,b)=>a+b.qty,0)} item(s) for $${totalAmount.toFixed(2)}?`);
 
     if (confirmPurchase) {
         boughtBooks.push(...cart);
@@ -267,95 +291,16 @@ buyNowBtn.addEventListener("click", () => {
     }
 });
 
-
-const hamburgerBtn = document.getElementById('hamburger-btn');
-const mobileMenu = document.getElementById('mobile-menu');
-
-function toggleMobileMenu() {
-    const isActive = mobileMenu.classList.contains('active');
-    
-    if (isActive) {
-        mobileMenu.classList.remove('active');
-        hamburgerBtn.classList.remove('active');
-        hamburgerBtn.setAttribute('aria-expanded', 'false');
-        hamburgerBtn.setAttribute('aria-label', 'Open menu');
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        setTimeout(() => hamburgerBtn.focus(), 100);
-    } else {
-        mobileMenu.classList.add('active');
-        hamburgerBtn.classList.add('active');
-        hamburgerBtn.setAttribute('aria-expanded', 'true');
-        hamburgerBtn.setAttribute('aria-label', 'Close menu');
-        mobileMenu.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        setTimeout(() => {
-            const firstLink = mobileMenu.querySelector('.mobile-nav-link');
-            if (firstLink) firstLink.focus();
-        }, 300);
-    }
-}
-
-hamburgerBtn?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMobileMenu();
-});
-
-mobileMenu?.addEventListener('click', (e) => {
-    if (e.target === mobileMenu) toggleMobileMenu();
-});
-
-document.addEventListener('click', (e) => {
-    if (mobileMenu.classList.contains('active') &&
-        !hamburgerBtn.contains(e.target) &&
-        !mobileMenu.contains(e.target)) {
-        toggleMobileMenu();
-    }
-});
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-        toggleMobileMenu();
-    }
-});
-
-document.querySelectorAll('.mobile-nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        setTimeout(toggleMobileMenu, 100);
-    });
-});
-
-document.getElementById('mobile-cart-btn')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    showPage("cart");
-    window.location.hash = "cart";
-    toggleMobileMenu();
-});
-
-window.addEventListener('resize', () => {
-    if (window.innerWidth > 768 && mobileMenu.classList.contains('active')) {
-        toggleMobileMenu();
-    }
-});
-
 window.onload = () => {
-    if (hamburgerBtn) {
-        hamburgerBtn.setAttribute('aria-expanded', 'false');
-        hamburgerBtn.setAttribute('aria-label', 'Open menu');
-    }
-    
     setupNav();
     setupSearch();
     updateCartCount();
     renderCart();
     updateLoginUI();
     loadGenres();
-    
-    const initialPage = location.hash.replace("#", "") || "home";
-    showPage(initialPage);
+    showPage(location.hash.replace("#", "") || "home");
 };
 
 window.onhashchange = () => {
-    const page = location.hash.replace("#", "") || "home";
-    showPage(page);
+    showPage(location.hash.replace("#", "") || "home");
 };
