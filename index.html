@@ -14,7 +14,7 @@
     <div class="header-container">
         <div class="logo">
             <h1 style="cursor: pointer;">
-                Bookpedia
+                <a href="#home" style="text-decoration: none;color: inherit;"> Bookpedia  </a> 
             </h1>
         </div>
 
@@ -35,21 +35,33 @@
                 <span class="cart-count" id="cart-count">0</span>
             </div>
         </nav>
-
-        <button id="hamburger-btn" class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+         <button id="hamburger-btn" class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
-
     </div>
 </header>
+
+<div id="mobile-menu" class="mobile-menu" aria-hidden="true">
+  <div class="mobile-menu-inner">
+    <nav class="mobile-nav">
+      <a href="#home" class="mobile-nav-link">Home</a>
+      <a href="#browse" class="mobile-nav-link">Browse</a>
+      <a href="#about" class="mobile-nav-link">About</a>
+      <a href="#contact" class="mobile-nav-link">Contact</a>
+      <a href="#cart" class="mobile-nav-link">Cart</a>
+    </nav>
+  </div>
+</div>
+
 
 <section id="home">
     <div class="hero">
         <h1>Find Your Next Great Read</h1>
         <p>Explore millions of books • Real covers • Instant search • Free forever</p>
-      <button class="cta-btn" onclick="location.href='#browse'">Start Browsing</button>
+        
+       <button class="cta-btn" onclick="location.href='#browse'">Start Browsing</button>
 
     </div>
 
@@ -78,13 +90,18 @@
 
 <section id="about">
     <div style="text-align:center; padding:4rem 1rem;">
-        <h1 style="color:var(--primary); font-size:3.5rem; margin-bottom:2rem;">About Bookpedia</h1>
-        <p style="font-size:1.4rem; max-width:900px; margin:0 auto 4rem;">
-            A beautiful, fast, and modern book discovery platform powered by Open Library API.<br>
-            Built with passion by a team of six talented developers.
+         <h1 style="color:var(--primary); font-size:3.5rem; margin-bottom:2rem;">
+            Bookpedia
+        </h1>
+        <p style="font-size:1.6rem; font-weight:bold; margin-bottom:2rem;">
+            <em>"Bookpedia – Because your next favorite book is just a click away!"</em>
+        </p>
+        <p style="font-size:1.4rem; max-width:800px; margin:0 auto 4rem;">
+            Bookpedia is your go-to place to find amazing books! We help you explore millions of books, see their real covers, and read descriptions in a snap. No stress, no complicated searches – just pick, click, and dive in.<br><br>
+            Made with love by a team of six book-loving developers, Bookpedia is fast, fun, and free. Start your reading adventure today – your next great story is waiting!
         </p>
 
-<h2 style="color:var(--primary); font-size:2.5rem; margin-bottom:3rem;">Meet the Team</h2>
+       <h2 style="color:var(--primary); font-size:2.5rem; margin-bottom:3rem;">Meet the Team</h2>
 
 <div class="team-grid">
     <div class="team-member">
@@ -100,7 +117,7 @@
     <div class="team-member">
         <h3>Ishant Dhakal</h3>
         <p><em>Developer</em></p>
-        <p>Contact page implementation</p>
+        <p>Contact Page</p>
     </div>
     <div class="team-member">
         <h3>Biswas Lamichhane</h3>
@@ -110,7 +127,7 @@
     <div class="team-member">
         <h3>Prajon Shrestha</h3>
         <p><em>Developer</em></p>
-        <p>Responsiveness & layout tweaks</p>
+        <p>Responsive Design</p>
     </div>
     <div class="team-member">
         <h3>Jenis Shrestha</h3>
@@ -119,6 +136,7 @@
     </div>
 </div>
 
+    </div>
 </section>
 
 <section id="contact">
@@ -139,9 +157,9 @@
             <div class="contact-person">
                 <h3>Karun Basnet</h3>
                 <div class="contact-links">
-                    <a href="mailto:justkarun022@gmail.com"><i class="fas fa-envelope"></i></a>
-                    <a href="https://github.com/karun000" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/karun-basnet-a67974378/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+                    <a href="mailto:sara@example.com"><i class="fas fa-envelope"></i></a>
+                    <a href="https://github.com/sara" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com/in/sara" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
                 </div>
             </div>
 
@@ -166,18 +184,18 @@
             <div class="contact-person">
                 <h3>Ishant Dhakal</h3>
                 <div class="contact-links">
-                    <a href="mailto:ishantdkl@gmail.com"><i class="fas fa-envelope"></i></a>
-                    <a href="https://github.com/TheWhiteCrow69" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
-                    <a href="www.linkedin.com/in/ishant-dhakal-4331aa398" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+                    <a href="mailto:omar@example.com"><i class="fas fa-envelope"></i></a>
+                    <a href="https://github.com/omar" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com/in/omar" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
                 </div>
             </div>
 
             <div class="contact-person">
                 <h3>Prajon Shrestha</h3>
                 <div class="contact-links">
-                    <a href="mailto:devilbusiness1357@gmail.com"><i class="fas fa-envelope"></i></a>
-                    <a href="https://github.com/DEVIL-Script" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/prajon-shrestha-097556351/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+                    <a href="mailto:ayesha@example.com"><i class="fas fa-envelope"></i></a>
+                    <a href="https://github.com/ayesha" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com/in/ayesha" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
                 </div>
             </div>
         </div>
@@ -196,7 +214,7 @@
     <div style="text-align:center; margin-top:3rem;">
         <button id="clear-cart">Clear Entire Cart</button>
         <br>
-        <button id="buy-now">Buy Now</button>
+        <button id="buy-now" >Buy Now</button>
     </div>
 </section>
 
@@ -225,21 +243,6 @@
   <div id="details-price"></div>
 <button id="details-add-cart">Add to Cart</button>
 </section>
-
-<div id="mobile-menu" class="mobile-menu" aria-hidden="true">
-    <div class="mobile-menu-inner">
-        <nav class="mobile-nav">
-            <a href="#home" class="mobile-nav-link">Home</a>
-            <a href="#browse" class="mobile-nav-link">Browse</a>
-            <a href="#about" class="mobile-nav-link">About</a>
-            <a href="#contact" class="mobile-nav-link">Contact</a>
-            <a href="login.html" class="mobile-nav-link">Login</a>
-            <div class="mobile-nav-link" id="mobile-cart-btn" style="cursor: pointer;">
-                <i class="fas fa-shopping-cart"></i> Cart (<span id="mobile-cart-count">0</span>)
-            </div>
-        </nav>
-    </div>
-</div>
 
 <script src="script.js"></script>
 </body>
