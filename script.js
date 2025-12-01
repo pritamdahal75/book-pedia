@@ -266,6 +266,8 @@ buyNowBtn.addEventListener("click", () => {
         alert("Purchase canceled.");
     }
 });
+
+
 const hamburgerBtn = document.getElementById('hamburger-btn');
 const mobileMenu = document.getElementById('mobile-menu');
 
@@ -277,6 +279,7 @@ function toggleMobileMenu() {
         hamburgerBtn.classList.remove('active');
         hamburgerBtn.setAttribute('aria-expanded', 'false');
         hamburgerBtn.setAttribute('aria-label', 'Open menu');
+        mobileMenu.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
         setTimeout(() => hamburgerBtn.focus(), 100);
     } else {
@@ -284,6 +287,7 @@ function toggleMobileMenu() {
         hamburgerBtn.classList.add('active');
         hamburgerBtn.setAttribute('aria-expanded', 'true');
         hamburgerBtn.setAttribute('aria-label', 'Close menu');
+        mobileMenu.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
         setTimeout(() => {
             const firstLink = mobileMenu.querySelector('.mobile-nav-link');
