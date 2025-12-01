@@ -648,35 +648,19 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
 }
 
 .mobile-menu-inner {
-    background: rgba(26, 26, 26, 0.7);
-    backdrop-filter: blur(10px);
-    padding: 2rem;
+    background: rgba(25, 25, 25, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 2rem 1.5rem;
     border-radius: 20px;
-    width: min(400px, 90%);
-    max-height: 80vh;
+    width: min(350px, 90%);
+    max-height: 85vh;
     overflow-y: auto;
     text-align: center;
     position: relative;
-    border: 1px solid rgba(255, 107, 107, 0.2);
-    box-shadow: 0 20px 60px rgba(255, 107, 107, 0.3);
-}
-
-.mobile-menu-close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 2rem;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    box-shadow: 0 25px 70px rgba(255, 107, 107, 0.3);
+    cursor: default;
+    margin-top: -20px;
 }
 
 .mobile-menu-close:hover {
@@ -688,7 +672,7 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-top: 2rem;
+    padding-top: 0.5rem;
 }
 
 .mobile-nav-link {
@@ -724,6 +708,7 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     justify-content: center;
     position: relative;
     z-index: 2600;
+    transition: all 0.3s ease;
 }
 
 .hamburger span {
@@ -733,20 +718,29 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     margin: 3px 0;
     background: white;
     border-radius: 3px;
-    transition: all 0.5s ease-out;
+    transition: all 0.3s ease;
     transform-origin: center;
 }
 
 .hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(8px, 8px);
+    transform: rotate(45deg) translate(5px, 5px);
 }
 
 .hamburger.active span:nth-child(2) {
     opacity: 0;
+    transform: translateX(-10px);
 }
 
 .hamburger.active span:nth-child(3) {
     transform: rotate(-45deg) translate(7px, -7px);
+}
+
+.hamburger:hover span {
+    background: var(--primary);
+}
+
+.hamburger.active:hover span {
+    background: white;
 }
 
 @media (max-width: 768px) {
