@@ -237,7 +237,7 @@ const buyNowBtn = document.getElementById("buy-now");
 
 function updateBuyNowButton() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    buyNowBtn.disabled = !loggedInUser || cart.length === 0;
+    buyNowBtn = !loggedInUser || cart.length === 0;
 }
 
 buyNowBtn.addEventListener("click", () => {
