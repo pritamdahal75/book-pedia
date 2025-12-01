@@ -630,17 +630,14 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
 
 .mobile-menu {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(5px);
     display: none;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     z-index: 2500;
-    padding: 1rem;
+    padding-top: 90px;
 }
 
 .mobile-menu.active {
@@ -653,15 +650,13 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     padding: 2rem 1.5rem;
     border-radius: 20px;
     width: min(350px, 90%);
-    max-height: 85vh;
+    max-height: calc(100vh - 80px);
     overflow-y: auto;
     text-align: center;
-    position: relative;
     border: 1px solid rgba(255, 107, 107, 0.4);
     box-shadow: 0 25px 70px rgba(255, 107, 107, 0.3);
-    cursor: default;
-    margin-top: -20px;
 }
+
 
 .mobile-menu-close:hover {
     background: rgba(255, 107, 107, 0.2);
