@@ -526,6 +526,36 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     font-weight: bolder;
 }
 
+.qty-input,
+.cart-qty {
+    width: 55px;
+    padding: 5px;
+    font-size: 15px;
+    border: 2px solid black;   
+    border-radius: 6px;
+    text-align: center;
+    background: rgb(108, 103, 103);           
+    color: #ffffff;                
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+
+.qty-input:focus,
+.cart-qty:focus {
+    border-color: white;         
+    background: #000000;           
+    outline: none;
+}
+
+.qty-input::-webkit-inner-spin-button,
+.qty-input::-webkit-outer-spin-button,
+.cart-qty::-webkit-inner-spin-button,
+.cart-qty::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 
 
 
@@ -747,32 +777,4 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     }
 }
 
-.qty-input,
-.cart-qty {
-    width: 55px;
-    padding: 5px;
-    font-size: 15px;
-    border: 2px solid black;   
-    border-radius: 6px;
-    text-align: center;
-    background: rgb(108, 103, 103);           
-    color: #ffffff;                
-    font-weight: 600;
-    transition: 0.2s ease;
-}
 
-
-.qty-input:focus,
-.cart-qty:focus {
-    border-color: white;         
-    background: #000000;           
-    outline: none;
-}
-
-.qty-input::-webkit-inner-spin-button,
-.qty-input::-webkit-outer-spin-button,
-.cart-qty::-webkit-inner-spin-button,
-.cart-qty::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
