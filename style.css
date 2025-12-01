@@ -526,7 +526,7 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     font-weight: bolder;
 }
 
-.qty-input,
+/* .qty-input,
 .cart-qty {
     width: 55px;
     padding: 5px;
@@ -554,7 +554,7 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
 .cart-qty::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
+} */
 
 
 
