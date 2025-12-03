@@ -1,3 +1,28 @@
+.logo {
+    font-size: 130px;
+    font-weight: 900;
+    background: linear-gradient(
+        90deg,
+        #ff0000,
+        #5a5afc,
+        #ff4ef8,
+        #cbdb13,
+        #ff0000
+    );
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: auroraText 6s ease infinite;
+
+}
+
+@keyframes auroraText {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -30,11 +55,11 @@ body::before {
 
 .logo a {
     text-decoration: none;
-    color: red;
+    color: rgb(255, 0, 0);
     font-weight: 900;
-    font-size: 32px;
+    font-size: 48px;
     letter-spacing: 2px;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.7), 0 0 10px rgba(255,221,87,0.8);
+    text-shadow: 2px 2px 8px rgba(213, 186, 186, 0.7), 0 0 10px rgba(255,221,87,0.8);
     transition: all 0.3s ease;
 }
 
@@ -42,7 +67,7 @@ body::before {
     width: 430px;
     padding: 40px 35px;
     border-radius: 20px;
-    background: rgba(255, 100, 100, 0.15);
+    background: rgba(53, 45, 45, 0.15);
     backdrop-filter: blur(18px) saturate(180%);
     -webkit-backdrop-filter: blur(18px) saturate(180%);
     border: 1px solid rgba(255, 100, 100, 0.3);
@@ -52,13 +77,16 @@ body::before {
     position: relative;
     z-index: 10;
 }
+form{
+    color: white;
+}
 
 form h1 {
     margin-bottom: 25px;
     font-size: 28px;
     font-weight: 700;
     color: #ff6b6b;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    text-shadow: 1px 1px 4px #fff4f480;
 }
 
 label {
@@ -67,7 +95,7 @@ label {
     font-size: 16px;
     margin-top: 15px;
     text-align: left;
-    color: #ffe9e9;
+    color: #faeded;
 }
 
 input[type="text"],
@@ -77,17 +105,17 @@ input[type="email"] {
     padding: 14px;
     margin-top: 5px;
     font-size: 16px;
-    border: 1.5px solid rgba(255,255,255,0.6);
+    border: 1.5px solid rgba(216, 166, 166, 0.6);
     border-radius: 10px;
     outline: none;
-    background: rgba(255,255,255,0.1);
-    color: #fff;
+    background: rgba(219, 199, 199, 0.349);
+    color: #f47d7d;
     transition: all 0.3s ease;
 }
 
 input:focus {
-    border-color: #ff6b6b;
-    background: rgba(255,255,255,0.2);
+    border-color: #864f4f;
+    background: rgba(75, 20, 20, 0.2);
 }
 
 button {
@@ -102,7 +130,7 @@ button {
     font-size: 17px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255,107,107,0.6);
+    box-shadow: 0 4px 15px rgba(228, 95, 95, 0.6);
 }
 
 button:hover {
@@ -158,23 +186,4 @@ p a:hover {
 .back-btn:hover {
     background: rgba(255,255,255,0.35);
     transform: scale(1.1);
-}
-
-#quote {
-    margin-top: 30px;
-    font-style: italic;
-    font-weight: 700;
-    font-size: 30px;
-    color: #ffb3b3;
-    text-align: center;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 20px 30px;
-    background-color: rgba(0, 0, 0, 0.65);
-    border-radius: 18px;
-    box-shadow: 0 0 20px 6px rgba(255,107,107,0.7);
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-    user-select: none;
-    transition: all 0.5s ease;
 }
