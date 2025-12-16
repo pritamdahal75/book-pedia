@@ -8,7 +8,6 @@ try {
 const FALLBACK_COVER = "https://via.placeholder.com/220x330?text=No+Cover";
 
 function addToCart(book) {
-    // If the book already exists, increase quantity
     const existing = cart.find(b => b.key === book.key);
     if (existing) {
         existing.qty = (existing.qty || 1) + 1;
@@ -113,9 +112,20 @@ function showPage(page) {
     document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
     const target = document.getElementById(page);
     if (target) target.style.display = "block";
+    
     const searchBar = document.querySelector(".search-bar");
-    if (searchBar) {
-        searchBar.style.display = (page === "browse") ? "flex" : "none";
+    const navLinks = document.querySelector(".nav-links");
+    
+    if (searchBar && navLinks) {
+        if (page === "browse") {
+            searchBar.classList.add("visible");
+            navLinks.classList.remove("expanded");
+            navLinks.classList.add("compact");
+        } else {
+            searchBar.classList.remove("visible");
+            navLinks.classList.remove("compact");
+            navLinks.classList.add("expanded");
+        }
     }
 }
 
@@ -160,10 +170,8 @@ function renderCart() {
         const qtyInput = div.querySelector(".cart-qty");
         const itemTotalEl = div.querySelector("strong");
 
-        // Stop click propagation
         qtyInput.addEventListener("click", e => e.stopPropagation());
 
-        // Handle quantity change
         qtyInput.addEventListener("input", e => {
             let val = parseInt(e.target.value);
             if (isNaN(val) || val < 1) val = 1;
@@ -174,7 +182,6 @@ function renderCart() {
             localStorage.setItem("bookpedia_cart", JSON.stringify(cart));
             itemTotalEl.textContent = `$${(item.price * val).toFixed(2)}`;
 
-            // Update total sum
             const newTotal = cart.reduce((sum, b) => sum + b.price * (b.qty || 1), 0);
             totalEl.textContent = newTotal.toFixed(2);
 
@@ -263,9 +270,29 @@ function setupNav() {
             window.location.hash = page;
         });
     });
+    
+    document.querySelectorAll(".mobile-nav a[href^='#']").forEach(link => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const page = link.getAttribute("href").replace("#", "");
+            showPage(page);
+            window.location.hash = page;
+            toggleMobileMenu();
+        });
+    });
+    
     document.getElementById("cart-btn")?.addEventListener("click", () => {
         showPage("cart");
         window.location.hash = "cart";
+    });
+    
+    document.querySelectorAll('.mobile-nav-link[href="#cart"]').forEach(link => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            showPage("cart");
+            window.location.hash = "cart";
+            toggleMobileMenu();
+        });
     });
 }
 
@@ -303,7 +330,6 @@ buyNowBtn.addEventListener("click", () => {
     }
 });
 
-// Hamburger menu & mobile nav
 const hamburgerBtn = document.getElementById('hamburger-btn');
 const mobileMenu = document.getElementById('mobile-menu');
 
@@ -313,22 +339,11 @@ function toggleMobileMenu() {
     if (isActive) {
         mobileMenu.classList.remove('active');
         hamburgerBtn.classList.remove('active');
-        hamburgerBtn.setAttribute('aria-expanded', 'false');
-        hamburgerBtn.setAttribute('aria-label', 'Open menu');
-        mobileMenu.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
-        setTimeout(() => hamburgerBtn.focus(), 100);
     } else {
         mobileMenu.classList.add('active');
         hamburgerBtn.classList.add('active');
-        hamburgerBtn.setAttribute('aria-expanded', 'true');
-        hamburgerBtn.setAttribute('aria-label', 'Close menu');
-        mobileMenu.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
-        setTimeout(() => {
-            const firstLink = mobileMenu.querySelector('.mobile-nav-link');
-            if (firstLink) firstLink.focus();
-        }, 300);
     }
 }
 
@@ -355,19 +370,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-document.querySelectorAll('.mobile-nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        setTimeout(toggleMobileMenu, 100);
-    });
-});
-
-document.getElementById('mobile-cart-btn')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    showPage("cart");
-    window.location.hash = "cart";
-    toggleMobileMenu();
-});
-
 window.addEventListener('resize', () => {
     if (window.innerWidth > 768 && mobileMenu.classList.contains('active')) {
         toggleMobileMenu();
@@ -375,17 +377,17 @@ window.addEventListener('resize', () => {
 });
 
 window.onload = () => {
-    if (hamburgerBtn) {
-        hamburgerBtn.setAttribute('aria-expanded', 'false');
-        hamburgerBtn.setAttribute('aria-label', 'Open menu');
-    }
-    
     setupNav();
     setupSearch();
     updateCartCount();
     renderCart();
     updateLoginUI();
     loadGenres();
+    
+    const navLinks = document.querySelector(".nav-links");
+    if (navLinks) {
+        navLinks.classList.add("expanded");
+    }
     
     const initialPage = location.hash.replace("#", "") || "home";
     showPage(initialPage);
