@@ -22,14 +22,14 @@ header {
     backdrop-filter: blur(8px);
 }
 .header-container {
-    max-width:1400px;
-    margin:0 auto;
-    padding:0 2rem;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 .logo h1 {
     font-size:2.8rem;
@@ -38,15 +38,24 @@ header {
     letter-spacing:1px;
 }
 .search-bar {
-    flex:1;
-    max-width:520px;
-    background:rgba(255,255,255,0.12);
-    border-radius:50px;
-    overflow:hidden;
-    display:flex;
-    transition:0.3s;
+    flex: 1;
+    max-width: 520px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 50px;
+    overflow: hidden;
+    display: none;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.search-bar:hover { background:rgba(255,255,255,0.18); }
+.search-bar.visible {
+    display: flex;
+    opacity: 1;
+    transform: scale(1);
+}
+.search-bar:hover { 
+    background: rgba(255,255,255,0.18); 
+}
 #search-input {
     flex:1;
     padding:1rem 1.8rem;
@@ -68,7 +77,13 @@ header {
 }
 #search-btn:hover { background:var(--secondary); transform:scale(1.05); }
 
-.nav-links { display:flex; gap:2rem; align-items:center; flex-wrap:wrap; }
+.nav-links { 
+    display:flex; 
+    gap:2rem; 
+    align-items:center; 
+    flex-wrap:wrap; 
+    transition: gap 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
 .nav-links a {
     color:white;
     text-decoration:none;
@@ -79,6 +94,12 @@ header {
 .nav-links a:hover {
     background:rgba(255,107,107,0.25);
     transform:scale(1.05);
+}
+.nav-links.expanded {
+    gap: 3.5rem;
+}
+.nav-links.compact {
+    gap: 2rem;
 }
 
 .cart-icon {
@@ -497,7 +518,7 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     -webkit-appearance: none;
     margin: 0;
 }
-/* GENERAL HEADER STYLES */
+
 .header-container {
     display: flex;
     justify-content: space-between;
@@ -506,7 +527,6 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     gap: 1rem;
 }
 
-/* HAMBURGER BUTTON */
 .hamburger {
     display: none;
     flex-direction: column;
@@ -555,7 +575,6 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     background: white;
 }
 
-/* MOBILE MENU */
 .mobile-menu {
     position: fixed;
     inset: 0;
@@ -566,10 +585,13 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     align-items: center;
     z-index: 2500;
     padding-top: 90px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .mobile-menu.active {
     display: flex;
+    opacity: 1;
 }
 
 .mobile-menu-inner {
@@ -583,6 +605,10 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     text-align: center;
     border: 1px solid rgba(255, 107, 107, 0.4);
     box-shadow: 0 25px 70px rgba(255, 107, 107, 0.3);
+}
+
+.mobile-menu.active .mobile-menu-inner {
+    transform: translateY(0);
 }
 
 .mobile-nav {
@@ -612,7 +638,6 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
     border-color: rgba(255, 107, 107, 0.3);
 }
 
-/* RESPONSIVE GRID FOR HEADER */
 @media (max-width: 768px) {
     .header-container {
         display: grid;
@@ -625,19 +650,29 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
         padding: 0.8rem 1rem;
     }
 
-    .logo { grid-area: logo; justify-self: start; }
-    .logo h1 { font-size: 1.5rem; margin: 0; white-space: nowrap; }
+    .logo {
+        grid-area: logo;
+        justify-self: start;
+    }
 
-    .nav-links { 
+    .logo h1 {
+        font-size: 1.5rem;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .nav-links {
         grid-area: cart;
         display: flex !important;
         justify-self: end;
-        gap: 0; 
+        gap: 0;
     }
 
-    .nav-links > *:not(.cart-icon) { display: none !important; }
+    .nav-links > *:not(.cart-icon) {
+        display: none !important;
+    }
 
-    .hamburger { 
+    .hamburger {
         display: flex;
         grid-area: hamburger;
         justify-self: end;
@@ -645,24 +680,76 @@ main { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
 
     .search-bar {
         grid-area: search;
+        display: none !important;
         width: 100%;
         margin-top: 0.5rem;
+        justify-content: center;
+        justify-self: center;
     }
 
-    .cart-icon { font-size: 1.5rem; }
-    .cart-count { width: 20px; height: 20px; font-size: 0.7rem; top: -8px; right: -8px; }
+    .search-bar.visible {
+        display: flex !important;
+    }
+
+    .search-bar input {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .cart-icon {
+        font-size: 1.5rem;
+    }
+
+    .cart-count {
+        width: 20px;
+        height: 20px;
+        font-size: 0.7rem;
+        top: -8px;
+        right: -8px;
+    }
 }
 
 @media (max-width: 480px) {
-    .logo h1 { font-size: 1.3rem; }
-    .hamburger { width: 40px; height: 36px; }
-    .hamburger span { width: 24px; height: 2.5px; }
-    .cart-icon { font-size: 1.4rem; }
-    .cart-count { width: 18px; height: 18px; font-size: 0.65rem; top: -6px; right: -6px; }
+    .logo h1 {
+        font-size: 1.3rem;
+    }
+
+    .hamburger {
+        width: 40px;
+        height: 36px;
+    }
+
+    .hamburger span {
+        width: 24px;
+        height: 2.5px;
+    }
+
+    .cart-icon {
+        font-size: 1.4rem;
+    }
+
+    .cart-count {
+        width: 18px;
+        height: 18px;
+        font-size: 0.65rem;
+        top: -6px;
+        right: -6px;
+    }
 }
 
 @media (min-width: 769px) {
-    .header-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-    .hamburger { display: none; }
-    .nav-links { display: flex !important; }
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .hamburger {
+        display: none;
+    }
+
+    .nav-links {
+        display: flex !important;
+    }
 }
